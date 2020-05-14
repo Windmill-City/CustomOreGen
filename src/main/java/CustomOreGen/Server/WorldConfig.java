@@ -15,6 +15,7 @@ import java.util.regex.Pattern;
 
 import javax.xml.parsers.ParserConfigurationException;
 
+import net.minecraft.world.gen.*;
 import org.xml.sax.SAXException;
 
 import com.google.common.collect.Maps;
@@ -28,11 +29,6 @@ import CustomOreGen.Util.BlockDescriptor;
 import CustomOreGen.Util.CIStringMap;
 import CustomOreGen.Util.MapCollection;
 import net.minecraft.world.World;
-import net.minecraft.world.gen.ChunkGeneratorEnd;
-import net.minecraft.world.gen.ChunkGeneratorFlat;
-import net.minecraft.world.gen.ChunkGeneratorHell;
-import net.minecraft.world.gen.ChunkGeneratorOverworld;
-import net.minecraft.world.gen.IChunkGenerator;
 import net.minecraft.world.storage.SaveHandler;
 import net.minecraft.world.storage.WorldInfo;
 
@@ -335,7 +331,9 @@ public class WorldConfig
 
         if (world != null)
         {
-            IChunkGenerator chunkGenerator = world.provider.createChunkGenerator();
+            IChunkGenerator chunkGenerator = world.getChunkProvider() instanceof ChunkProviderServer ?
+                    ((ChunkProviderServer)world.getChunkProvider()).chunkGenerator
+                    : world.provider.createChunkGenerator();
             genName = chunkGenerator.toString();
             genClass = chunkGenerator.getClass().getSimpleName();
 
